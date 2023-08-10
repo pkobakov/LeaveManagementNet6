@@ -6,9 +6,9 @@ namespace LeaveManagement.Web.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ApplicationDbContext context;
+        private readonly Data.ApplicationDbContext context;
 
-        public Repository(ApplicationDbContext context) 
+        public Repository(Data.ApplicationDbContext context) 
         {
             this.context = context;
         }
@@ -39,8 +39,13 @@ namespace LeaveManagement.Web.Repositories
             return await this.context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetAsync(int id)
+        public async Task<T?> GetAsync(int? id)
         {
+            if (id == null) 
+            {
+                return null;
+            }
+
             return await this.context.Set<T>().FindAsync(id);
         }
 
