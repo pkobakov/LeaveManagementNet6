@@ -22,6 +22,7 @@ namespace LeaveManagement.Web
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Data.ApplicationDbContext>();
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
