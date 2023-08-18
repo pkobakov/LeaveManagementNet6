@@ -30,7 +30,8 @@ namespace LeaveManagement.Web
             builder.Services.AddTransient<IEmailSender>(s => new EmailSender("localhost", 25, "no-reply@leavemanagement.com" ));
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddScoped<Contracts.ILeaveTypeRepository, LeaveTypeRepository>();
+            builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
+            builder.Services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
 
             builder.Services.AddAutoMapper(typeof(MapperConfig));
 
