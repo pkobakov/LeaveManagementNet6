@@ -5,6 +5,7 @@ using LeaveManagement.Web.Data;
 using LeaveManagement.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace LeaveManagement.Web.Repositories
 {
@@ -39,6 +40,23 @@ namespace LeaveManagement.Web.Repositories
             var employeeAllocationModel = mapper.Map<EmployeeAllocationsVM>(employee);
             employeeAllocationModel.LeaveAllocations = mapper.Map<List<LeaveAllocationVM>>(allocations);
             return employeeAllocationModel;
+        }
+
+        public async Task<LeaveAllocationEditVM> GetEmployeeAllocation(int id) 
+        {
+            var allocation = await context.LeaveAllocations.Include(a => a.LeaveType).FirstOrDefaultAsync(a => a.Id == id);
+
+            if (allocation == null)
+            {
+                return null;
+            }
+
+            var employee = await userManager.FindByIdAsync(allocation.EmployeeId);
+
+            var model = mapper.Map<LeaveAllocationEditVM>(allocation);
+            model.Employee = mapper.Map<EmployeeListVM>(employee);
+
+            return model;
         }
 
         public async Task LeaveAllocation(int leaveTypeId)
