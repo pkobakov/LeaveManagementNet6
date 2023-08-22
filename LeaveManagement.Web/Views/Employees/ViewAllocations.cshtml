@@ -47,14 +47,14 @@
             <li class="list-group-item">
                 <h6>
                     @allocation.LeaveType.Name
+                </h6>
                 <button type="button" class="btn btn-primary">
                     Allocated Days<span class="badge bg-secondary">@allocation.LeaveType.DefaultDays</span>
                 </button>
                 <button type="button" class="btn btn-primary">
                     Remaining Days<span class="badge bg-secondary">@allocation.NumberOfDays</span>
                 </button>
-            </h6>
-            <a class="btn btn-warning" asp-action="EditAllocation" asp-route-id="@allocation.Id"><i class=" fas fa-pencil-alt"></i> Edit Allocation </a>
+                <a class="btn btn-warning" asp-action="EditAllocation" asp-route-id="@allocation.Id"><i class=" fas fa-pencil-alt"></i> Edit Allocation </a>
             </li>
          }
     </ul>
