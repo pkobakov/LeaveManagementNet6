@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeaveManagement.Web.Data
 {
-    public class LeaveAllocation : BaseIdentity
+    public class LeaveAllocation : BaseEntity
     {
         public int NumberOfDays { get; set; }
 
