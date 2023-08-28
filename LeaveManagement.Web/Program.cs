@@ -27,6 +27,8 @@ namespace LeaveManagement.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Data.ApplicationDbContext>();
 
+            builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddTransient<IEmailSender>(s => new EmailSender("localhost", 25, "no-reply@leavemanagement.com" ));
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
