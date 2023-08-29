@@ -19,7 +19,8 @@ namespace LeaveManagement.Web.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILeaveRequestRepository leaveRequestRepository;
 
-        public LeaveRequestsController(ApplicationDbContext context,ILeaveRequestRepository leaveRequestRepository)
+        public LeaveRequestsController(ApplicationDbContext context,
+            ILeaveRequestRepository leaveRequestRepository)
         {
             _context = context;
             this.leaveRequestRepository = leaveRequestRepository;
@@ -30,6 +31,12 @@ namespace LeaveManagement.Web.Controllers
         {
             var applicationDbContext = _context.LeaveRequests.Include(l => l.LeaveType);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        public async Task<ActionResult> MyLeave() 
+        {
+           var model = await leaveRequestRepository.GetMyLeaveDetails();
+           return View(model);
         }
 
         // GET: LeaveRequests/Details/5
@@ -78,7 +85,7 @@ namespace LeaveManagement.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 ModelState.AddModelError(string.Empty, "An Error Has Occured. Please Try Again Later");
