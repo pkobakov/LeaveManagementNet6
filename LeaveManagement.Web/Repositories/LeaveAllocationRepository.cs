@@ -98,5 +98,10 @@ namespace LeaveManagement.Web.Repositories
 
             return true;
         }
+
+        public Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
