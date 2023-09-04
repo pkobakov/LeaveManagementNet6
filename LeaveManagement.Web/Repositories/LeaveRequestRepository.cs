@@ -91,6 +91,21 @@ namespace LeaveManagement.Web.Repositories
            return await context.LeaveRequests.Where(u => u.RequestingEmployeeId == empolyeeId).ToListAsync(); 
         }
 
+        public async  Task<LeaveRequestVM> GetLeaveRequestAsync(int? id)
+        {
+            var leaveRequest = await context.LeaveRequests
+                                      .Include(l => l.LeaveType)
+                                      .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (leaveRequest == null) 
+            {
+                return null;
+            }
+            var model = mapper.Map<LeaveRequestVM>(leaveRequest);
+            model.Employee = mapper.Map<EmployeeListVM>(await userManager.FindByIdAsync(leaveRequest.RequestingEmployeeId));
+            return model;
+        }
+
         public  async Task<EmployeeLeaveRequestViewVM> GetMyLeaveDetails()
         {
             var user = await userManager.GetUserAsync(httpContextAccessor?.HttpContext?.User);

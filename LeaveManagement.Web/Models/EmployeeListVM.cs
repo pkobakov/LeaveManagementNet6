@@ -15,5 +15,6 @@ namespace LeaveManagement.Web.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]
         public DateTime DateJoined{ get; set; }
+
     }
 }

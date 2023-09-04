@@ -99,9 +99,9 @@ namespace LeaveManagement.Web.Repositories
             return true;
         }
 
-        public Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
+        public async Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
         {
-            throw new NotImplementedException();
+            return await context.LeaveAllocations.FirstOrDefaultAsync(a => a.EmployeeId == employeeId && a.LeaveTypeId == leaveTypeId);
         }
     }
 }
