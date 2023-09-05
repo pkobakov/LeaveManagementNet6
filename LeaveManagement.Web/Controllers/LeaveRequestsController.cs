@@ -26,6 +26,7 @@ namespace LeaveManagement.Web.Controllers
             _context = context;
             this.leaveRequestRepository = leaveRequestRepository;
         }
+
         [Authorize(Roles = Roles.Administrator)]
         // GET: LeaveRequests
         public async Task<IActionResult> Index()
@@ -70,6 +71,23 @@ namespace LeaveManagement.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int leaveRequestId) 
+        {
+            try
+            {
+                await leaveRequestRepository.CancelLeaveRequest(leaveRequestId);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return RedirectToAction(nameof(MyLeave));
+        }
+
         // GET: LeaveRequests/Create
         public IActionResult Create()
         {
@@ -93,8 +111,14 @@ namespace LeaveManagement.Web.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    await leaveRequestRepository.CreateLeaveRequest(model);
-                    return RedirectToAction(nameof(Index));
+                    var isValidRequest = await leaveRequestRepository.CreateLeaveRequest(model);
+
+                    if (isValidRequest)
+                    {
+                        return RedirectToAction(nameof(MyLeave));
+                    }
+
+                    ModelState.AddModelError(string.Empty, "You have exceeded your allocation for this request.");
                 }
             }
             catch (Exception ex)

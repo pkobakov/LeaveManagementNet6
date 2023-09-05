@@ -33,6 +33,13 @@ namespace LeaveManagement.Web.Repositories
             this.userManager = userManager;
         }
 
+        public async Task CancelLeaveRequest(int leaveRequestId)
+        {
+            var leaveRequest = await GetAsync(leaveRequestId);
+            leaveRequest.Cancelled = true;
+            await UpdateAsync(leaveRequest);
+        }
+
         public async Task ChangeApprovalStatus(int leaveRequestId, bool approved)
         {
             var leaveRequest = await GetAsync(leaveRequestId);
@@ -55,14 +62,30 @@ namespace LeaveManagement.Web.Repositories
             await emailSender.SendEmailAsync(user.Email, $"Leave Request {approvalStatus}", $"Your Request From {leaveRequest.StartDate} to {leaveRequest.EndDate} has been {approved}");
         }
 
-        public async Task  CreateLeaveRequest(LeaveRequestCreateVM nodel)
+        public async Task<bool>  CreateLeaveRequest(LeaveRequestCreateVM model)
         {
             var user = await userManager.GetUserAsync(httpContextAccessor?.HttpContext?.User);
-            var leaveRequest = mapper.Map<LeaveRequest>(nodel);
+            var leaveAllocation = await leaveAllocationRepository.GetEmployeeAllocation(user.Id, model.LeaveTypeId);
+
+            if (leaveAllocation == null) 
+            {
+                return false;
+            
+            }
+
+            int daysRequested = (int)(model.EndDate.Value - model.StartDate.Value).TotalDays;
+
+            if (daysRequested > leaveAllocation.NumberOfDays)
+            {
+                return false;
+            }
+
+            var leaveRequest = mapper.Map<LeaveRequest>(model);
             leaveRequest.DateRequested = DateTime.Now;
             leaveRequest.RequestingEmployeeId = user.Id;
 
             await AddAsync(leaveRequest);
+            return true;
         }
 
         public async Task<AdminLeaveRequestViewVM> GetAdminRequestList()

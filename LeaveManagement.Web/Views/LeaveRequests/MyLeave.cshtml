@@ -5,7 +5,7 @@
 
 }
 
-<h2>My Leave Allocations</h2>
+<h2>Leave Allocations</h2>
 <div class="card">
     <div class="card-header">
         <h4>
@@ -103,7 +103,14 @@
                     </td>
 
                     <td>
-                        <a asp-action="Cancel" class="btn btn-danger btn-sm" asp-route-id="@item.Id">Cancel Request</a>
+                        @if (item.Approved == null)
+                        {
+                            <form>
+                                <input asp-for="@item.Id" type="hidden"/>
+                                <button type="submit" class="btn btn-danger btn-sm" >Cancel Request</button>
+                            </form>
+                        }
+                        @*<a asp-action="Cancel" class="btn btn-danger btn-sm" asp-route-id="@item.Id">Cancel Request</a>*@
                     </td>
                 </tr>
             }
