@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LeaveManagement.Web.Contracts;
 using LeaveManagement.Web.Data;
 using LeaveManagement.Web.Models;
@@ -118,6 +119,7 @@ namespace LeaveManagement.Web.Repositories
         {
             var leaveRequest = await context.LeaveRequests
                                       .Include(l => l.LeaveType)
+                                      .ProjectTo<LeaveRequestVM>()
                                       .FirstOrDefaultAsync(l => l.Id == id);
 
             if (leaveRequest == null) 

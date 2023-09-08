@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LeaveManagement.Web.Constants;
 using LeaveManagement.Web.Contracts;
 using LeaveManagement.Web.Data;
@@ -15,15 +16,18 @@ namespace LeaveManagement.Web.Repositories
         private readonly UserManager<Employee> userManager;
         private readonly ILeaveTypeRepository leaveTypeRepository;
         private readonly IMapper mapper;
+        private readonly AutoMapper.IConfigurationProvider configurationProvider;
 
         public LeaveAllocationRepository(ApplicationDbContext context, 
-            UserManager<Employee> userManager, ILeaveTypeRepository repository, IMapper mapper)
+            UserManager<Employee> userManager, ILeaveTypeRepository repository, IMapper mapper,
+          AutoMapper.IConfigurationProvider configurationProvider)
             : base(context)
         {
             this.context = context;
             this.userManager = userManager;
             this.leaveTypeRepository = repository;
             this.mapper = mapper;
+            this.configurationProvider = configurationProvider;
         }
 
         public async Task<bool> AllocationExists(string employeeId, int leaveTypeId, int period)
@@ -35,7 +39,9 @@ namespace LeaveManagement.Web.Repositories
         {
             var allocations = await  this.context.LeaveAllocations.Include(a => a.LeaveType)
                                                                   .Where(a => a.EmployeeId == employeeId)
+                                                                  .ProjectTo<LeaveAllocationVM>(configurationProvider)
                                                                   .ToListAsync();
+
             var employee = await this.userManager.FindByIdAsync(employeeId);
             var employeeAllocationModel = mapper.Map<EmployeeAllocationsVM>(employee);
             employeeAllocationModel.LeaveAllocations = mapper.Map<List<LeaveAllocationVM>>(allocations);
@@ -44,7 +50,9 @@ namespace LeaveManagement.Web.Repositories
 
         public async Task<LeaveAllocationEditVM> GetEmployeeAllocation(int id) 
         {
-            var allocation = await context.LeaveAllocations.Include(a => a.LeaveType).FirstOrDefaultAsync(a => a.Id == id);
+            var allocation = await context.LeaveAllocations.Include(a => a.LeaveType)
+                                                           .ProjectTo<LeaveAllocationEditVM>(configurationProvider)
+                                                           .FirstOrDefaultAsync(a => a.Id == id);
 
             if (allocation == null)
             {
