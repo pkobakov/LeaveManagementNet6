@@ -144,6 +144,7 @@ namespace LeaveManagement.Web.Controllers
             {
                 return NotFound();
             }
+
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Id", leaveRequest.LeaveTypeId);
             return View(leaveRequest);
         }
