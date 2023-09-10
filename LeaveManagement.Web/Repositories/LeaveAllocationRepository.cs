@@ -116,6 +116,10 @@ namespace LeaveManagement.Web.Repositories
             leaveallocation.NumberOfDays = model.NumberOfDays;
             await this.UpdateAsync(leaveallocation);
 
+            var user = await userManager.FindByIdAsync(leaveallocation.EmployeeId);
+
+            await emailSender.SendEmailAsync(user.Email, $"Leave Allocation Updated for {leaveallocation.Period}", "Please review your leave allocation");
+
             return true;
         }
 
