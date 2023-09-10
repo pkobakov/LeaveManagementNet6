@@ -12,6 +12,7 @@ using LeaveManagement.Web.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using LeaveManagement.Web.Constants;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.Metadata;
 
 namespace LeaveManagement.Web.Controllers
 {
@@ -98,11 +99,19 @@ namespace LeaveManagement.Web.Controllers
                 return NotFound();
             }
 
+            var leaveType = await leaveTypeRepository.GetAsync(id);
+            
+            if (leaveType == null) 
+            {
+                return NotFound();
+              
+            }
+
             if (ModelState.IsValid)
             {
                 try
-                {
-                    var leaveType = mapper.Map<LeaveType>(leaveTypeVM);
+                { 
+                    mapper.Map(leaveTypeVM, leaveType);
                     await leaveTypeRepository.UpdateAsync(leaveType);
                 }
                 catch (DbUpdateConcurrencyException)
