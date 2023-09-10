@@ -42,6 +42,11 @@ namespace LeaveManagement.Web.Repositories
             var leaveRequest = await GetAsync(leaveRequestId);
             leaveRequest.Cancelled = true;
             await UpdateAsync(leaveRequest);
+
+            var user = await userManager.FindByIdAsync(leaveRequest.RequestingEmployeeId);
+
+            await emailSender.SendEmailAsync(user.Email, "Leave Request Cancelled" , $"Your Leave Request from {leaveRequest.StartDate} to {leaveRequest.EndDate} has been cancelled successfully. ");
+
         }
 
         public async Task ChangeApprovalStatus(int leaveRequestId, bool approved)
@@ -89,6 +94,9 @@ namespace LeaveManagement.Web.Repositories
             leaveRequest.RequestingEmployeeId = user.Id;
 
             await AddAsync(leaveRequest);
+
+            await emailSender.SendEmailAsync(user.Email, "Leave Request Submitted Successfully", $"Your Leave Request from {leaveRequest.StartDate} to {leaveRequest.EndDate} has been submitted for approval.");
+            
             return true;
         }
 
