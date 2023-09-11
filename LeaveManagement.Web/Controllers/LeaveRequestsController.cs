@@ -19,12 +19,15 @@ namespace LeaveManagement.Web.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILeaveRequestRepository leaveRequestRepository;
+        private readonly ILogger<LeaveRequestsController> logger;
 
         public LeaveRequestsController(ApplicationDbContext context,
-            ILeaveRequestRepository leaveRequestRepository)
+            ILeaveRequestRepository leaveRequestRepository,
+            ILogger<LeaveRequestsController> logger)
         {
             _context = context;
             this.leaveRequestRepository = leaveRequestRepository;
+            this.logger = logger;
         }
 
         [Authorize(Roles = Roles.Administrator)]
@@ -64,7 +67,7 @@ namespace LeaveManagement.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex, "Error Canceling Leave Request");
                 throw;
             }
 
@@ -123,7 +126,7 @@ namespace LeaveManagement.Web.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex, "Error Creating Leave Request");
                 ModelState.AddModelError(string.Empty, "An Error Has Occured. Please Try Again Later");
             }
             
@@ -154,7 +157,7 @@ namespace LeaveManagement.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StartDate,EndDate,LeaveTypeId,DateRequested,RequestComments,Approved,Cancelled,RequestingEmployeeId,Id,DateCreated,DateModified")] LeaveRequest leaveRequest)
+        public async Task<IActionResult> Edit(int id, LeaveRequestVM leaveRequest)
         {
             if (id != leaveRequest.Id)
             {
