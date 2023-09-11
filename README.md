@@ -5,6 +5,6 @@
 <br/>
 - <a href="https://sweetalert2.github.io/">Sweet Alert</a>
 <br/>
-- PaperCut for Email confirmation configuration.
+- <a href= "https://github.com/ChangemakerStudios/Papercut-SMTP">PaperCut</a> for Email confirmation configuration.
 <br/>
-For more information <a href="https://github.com/ChangemakerStudios/Papercut-SMTP">click here</a>
+- <a href="https://datalust.co/seq">Seq</a> - Structure Logging
