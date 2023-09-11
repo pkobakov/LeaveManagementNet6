@@ -9,4 +9,4 @@
 <br/>
 For more information <a href="https://github.com/ChangemakerStudios/Papercut-SMTP">click here</a>
 <br/>
-- <a href="https://datalust.co/seq">Seq - Structure Logging</a>
+- <a href="https://datalust.co/seq">Seq</a> - Structure Logging
