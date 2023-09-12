@@ -1,13 +1,11 @@
-using LeaveManagement.Web.Configuration;
-using LeaveManagement.Web.Contracts;
-using LeaveManagement.Web.Data;
-using LeaveManagement.Web.Repositories;
+using LeaveManagement.Web.Configurations;
+using LeaveManagement.Application.Contracts;
+using LeaveManagement.Data;
+using LeaveManagement.Application.Repositories;
 using LeaveManagement.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 using Serilog;
 
 namespace LeaveManagement.Web
